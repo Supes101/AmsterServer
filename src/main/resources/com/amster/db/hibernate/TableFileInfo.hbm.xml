@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 12, 2016 1:57:55 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.amster.db.hibernate.TableFileInfo" table="table_file_info" catalog="amster">
+        <id name="id" type="java.lang.Integer">
+            <column name="_id" />
+            <generator class="identity" />
+        </id>
+        <property name="removeAllStacks" type="java.lang.Boolean">
+            <column name="remove_all_stacks" />
+        </property>
+        <property name="exceptionIgnoreList" type="string">
+            <column name="exception_ignore_list" length="5000" />
+        </property>
+        <property name="fileInfo2logFile" type="java.lang.Integer">
+            <column name="file_info2log_file" />
+        </property>
+    </class>
+</hibernate-mapping>

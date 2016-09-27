@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 12, 2016 1:57:55 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.amster.db.hibernate.TableLogFile" table="table_log_file" catalog="amster">
+        <id name="id" type="java.lang.Integer">
+            <column name="_id" />
+            <generator class="identity" />
+        </id>
+        <property name="shortName" type="string">
+            <column name="short_name" length="1000" />
+        </property>
+        <property name="realFileName" type="string">
+            <column name="real_file_name" length="1000" />
+        </property>
+        <property name="outputFileName" type="string">
+            <column name="output_file_name" length="1000" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="65535" />
+        </property>
+        <property name="createDate" type="date">
+            <column name="create_date" length="10" />
+        </property>
+        <set name="threadFiles" table="table_thread_file"
+				inverse="false" lazy="true"  fetch="select">
+            <key>
+                <column name="thread_info2log_file" not-null="true" />
+            </key>
+            <one-to-many class="com.amster.db.hibernate.TableThreadFile" />
+        </set>
+        <set name="topQueries" table="table_top_queries"
+				inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="query2log_file" not-null="true" />
+            </key>
+            <one-to-many class="com.amster.db.hibernate.TableTopQueries" />
+        </set>
+        <set name="exceptions" table="table_exception"
+				inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="exception2log_file" not-null="true" />
+            </key>
+            <one-to-many class="com.amster.db.hibernate.TableException" />
+        </set>
+        <set name="diagInfo" table="table_diag_info"
+				inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="diag2log_file" not-null="true" />
+            </key>
+            <one-to-many class="com.amster.db.hibernate.TableDiagInfo" />
+        </set>
+        <set name="timeLog" table="table_time_log" order-by="log_time"
+				inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="time_log2log_file" not-null="true" />
+            </key>
+            <one-to-many class="com.amster.db.hibernate.TableTimeLog" />
+        </set>
+    </class>
+</hibernate-mapping>

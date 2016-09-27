@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory name="MYSQL">
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">Ab3rtaw3</property>
+        <property name="hibernate.connection.url">jdbc:mysql://CERI01:3306/amster</property>
+        <property name="hibernate.connection.username">sco_sa</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        
+        <property name="hibernate.c3p0.min_size">5</property>
+  		<property name="hibernate.c3p0.max_size">20</property>
+  		<property name="hibernate.c3p0.timeout">300</property>
+  		<property name="hibernate.c3p0.max_statements">50</property>
+  		<property name="hibernate.c3p0.idle_test_period">3000</property>
+        
+        <mapping resource="com/amster/db/hibernate/TableLogFile.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableDiag.hbm.xml"></mapping> 
+        <mapping resource="com/amster/db/hibernate/TableDiagInfo.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableException.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableExceptionTimes.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableFileInfo.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableThreadFile.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableTimeLog.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableTopQueries.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/ViewLogFile.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/ViewTimeLog.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/ViewTopQueries.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/ViewThreadFile.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/TableDiagnostic.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/TableExceptionDetail.hbm.xml"></mapping>	
+	</session-factory>
+</hibernate-configuration>

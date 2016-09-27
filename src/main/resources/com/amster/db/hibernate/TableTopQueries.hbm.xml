@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 12, 2016 1:57:55 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.amster.db.hibernate.TableTopQueries" table="table_top_queries" catalog="amster">
+        <id name="id" type="java.lang.Integer">
+            <column name="_id" />
+            <generator class="identity" />
+        </id>
+        <property name="querySql" type="string">
+            <column name="query_sql" length="65535" />
+        </property>
+        <property name="elapsedTime" type="java.lang.Float">
+            <column name="elapsed_time" precision="12" scale="0" />
+        </property>
+        <property name="queryTime" type="string">
+            <column name="query_time" length="100" />
+        </property>
+        <property name="queryOrder" type="java.lang.Integer">
+            <column name="query_order" />
+        </property>
+        <many-to-one name="logFile" class="com.amster.db.hibernate.TableLogFile" fetch="select">
+            <column name="query2log_file" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

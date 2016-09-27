@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 12, 2016 1:57:55 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.amster.db.hibernate.ViewTimeLog" table="view_time_log" catalog="amster">
+        <id name="id" type="java.lang.Integer">
+            <column name="_id" />
+        </id>
+        <property name="heading" type="string">
+            <column name="heading" length="5000" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="65535" />
+        </property>
+       	<property name= "logTime" type="timestamp">
+            <column name="log_time" length="10" />
+        </property>
+       <property name= "timeString" type="string">
+            <column name="time_string" length="50" />
+        </property>
+        <property name= "headingColour" type="string">
+            <column name="heading_colour" length="100" />
+        </property>
+        <property name= "iconColour" type="string">
+            <column name="icon_colour" length="100" />
+        </property>       
+         <property name= "logFile" type="java.lang.Integer">
+            <column name="time_log2log_file" />
+        </property>
+       
+    </class>
+</hibernate-mapping>
