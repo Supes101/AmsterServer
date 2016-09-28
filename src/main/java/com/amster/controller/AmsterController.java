@@ -30,6 +30,7 @@ public class AmsterController {
 	        hib_Session.getTransaction().commit();
 	                
 	        return query.list();
+	        
 		
 	}
 
