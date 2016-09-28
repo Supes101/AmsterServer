@@ -16,8 +16,6 @@ import com.amster.db.persistence.HibernateUtil;
 @RequestMapping("/rest")
 public class AmsterController {
 	@Autowired
-
-	
 	@RequestMapping("/logfile-detail")
 	public List<?> getLogFileDetails(@RequestParam(value = "id",required = true) String id) {
 		

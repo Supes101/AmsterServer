@@ -116,7 +116,7 @@
             	<groupId>org.apache.maven.plugins</groupId>
             	<artifactId>maven-war-plugin</artifactId>
             	<configuration>
-               		 <outputDirectory>C:\Tomcat85\webapps</outputDirectory>
+               		 <outputDirectory>C:\Tomcat8\webapps</outputDirectory>
             	</configuration>
         	</plugin>
 		</plugins>
