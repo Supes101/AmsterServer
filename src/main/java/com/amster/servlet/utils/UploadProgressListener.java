@@ -21,6 +21,7 @@ public class UploadProgressListener implements ProgressListener {
 	
 	public void update(long bytesRead, long contentLength, int items) {
 
+		
 		if (contentLength > -1) {
 			contentLengthKnown = true;
 		}
@@ -35,7 +36,7 @@ public class UploadProgressListener implements ProgressListener {
 			if (contentLengthKnown) {
 				percentDone = (int) Math.round(100.00 * bytesRead / contentLength);
 			}
-			//System.out.println(getJSON());
+
 		}
 	}
 	
@@ -56,7 +57,15 @@ public class UploadProgressListener implements ProgressListener {
 	}
 
 	public void clear(){
-		percentDone=0;
+
+		theBytesRead = 0;
+		theContentLength = -1;
+		whichItem = 0;
+		percentDone = 0;
+		contentLengthKnown = false;
+		num100Ks=0;
+		theBytesParsed =0;
+		parse100ks=0;
 		parsePercentDone=0;
 	}
 	

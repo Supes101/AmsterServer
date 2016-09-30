@@ -78,7 +78,6 @@ public class AmsterLogFileUploadServlet extends HttpServlet  {
 	protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println("HERE");
 		String fileName = "";
 		String shortName="";
 		String description = "";

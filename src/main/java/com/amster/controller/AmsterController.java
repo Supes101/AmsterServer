@@ -15,7 +15,7 @@ import com.amster.db.persistence.HibernateUtil;
 @RestController
 @RequestMapping("/rest")
 public class AmsterController {
-	@Autowired
+
 	@RequestMapping("/logfile-detail")
 	public List<?> getLogFileDetails(@RequestParam(value = "id",required = true) String id) {
 		
@@ -52,7 +52,9 @@ public class AmsterController {
 	        }
 
 	        hib_Session.getTransaction().commit();
-	              	        
+	        
+	        
+	        
 	        return query.list();
 		
 	}
