@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 12, 2016 1:57:55 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.amster.db.hibernate.ViewThreadFile" table="view_thread_file" catalog="amster">
+        <id name="id" type="java.lang.Integer">
+            <column name="_id" />
+        </id>
+        <property name="threadId" type="string">
+            <column name="thread_id" length="500" />
+        </property>
+        <property name="threadFile" type="string">
+            <column name="thread_file" length="1000" />
+        </property>
+        <property name="logFile" type="java.lang.Integer">
+            <column name="thread_info2log_file" />
+        </property>
+    </class>
+</hibernate-mapping>

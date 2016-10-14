@@ -1,12 +1,19 @@
 package com.amster.servlets;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -19,38 +26,108 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.amster.db.hibernate.TableLogFile;
 import com.amster.db.persistence.HibernateUtil;
 import com.amster.logparser.ClfyLogParser;
+import com.amster.poc.TestProperties;
 import com.amster.servlet.utils.UploadProgressListener;
 
-
 @WebServlet("/uploadlog")
-@MultipartConfig(fileSizeThreshold=1024*1024*4, // 4MB
-                 maxFileSize=1024*1024*1000,      // 1000MB
-                 maxRequestSize=1024*1024*1000)   // 1000MB
+@MultipartConfig(fileSizeThreshold=1024*1024*0, // 0MB
+                 maxFileSize=1024*1024*1000,      // 1GB
+                 maxRequestSize=1024*1024*1000)   // 1GB
 public class AmsterLogFileUploadServlet extends HttpServlet  {
 
-	
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	// location to store file uploaded
-    private static final String UPLOAD_DIRECTORY = "uploaded_logs";
+    private static  String UPLOAD_DIRECTORY = "\\uploaded_logs";
  
     // upload settings
-    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 0;  // 0MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 1500; // 1500MB
-    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 1500; // 1500MB
-    
+    private static  int MEMORY_THRESHOLD   = 1024 * 1024 * 0;  // 0MB
+    private static long MAX_FILE_SIZE      = AmsterLogFileUploadServlet.class.getAnnotation(MultipartConfig.class).maxFileSize(); 
+    private static long MAX_REQUEST_SIZE   = AmsterLogFileUploadServlet.class.getAnnotation(MultipartConfig.class).maxRequestSize();
+  
 
+  
+	public AmsterLogFileUploadServlet(){
+		
+		Properties prop = new Properties();
+		InputStream input = null;
+
+
+		try {
+			input = TestProperties.class.getClassLoader().getResourceAsStream("amster.properties");
+			
+			
+			if(input!=null){
+				// load a properties file
+				prop.load(input);
+				
+				String propMemThresh =  prop.getProperty("memory_threshold");
+				if(propMemThresh!=null){
+					MEMORY_THRESHOLD = Integer.valueOf(propMemThresh);
+				}
+				System.out.println("**AMSTER - Memory Threshold: " +MEMORY_THRESHOLD);
+				
+				String propUploadDir =  prop.getProperty("upload_location");
+				if(propUploadDir!=null){
+					UPLOAD_DIRECTORY = propUploadDir;
+				}
+				System.out.println("**AMSTER - Upload directory: " +UPLOAD_DIRECTORY);
+				
+				String propMaxFile =  prop.getProperty("max_file_size");
+				if(propMaxFile!=null){
+					MAX_FILE_SIZE = Long.valueOf(propMaxFile);
+				}
+				System.out.println("**AMSTER - Max File Size: " +MAX_FILE_SIZE);
+				
+				String propReqSize =  prop.getProperty("max_request_size");
+				if(propReqSize!=null){
+					MAX_REQUEST_SIZE = Long.valueOf(propReqSize);
+				}
+				System.out.println("**AMSTER - Max Request Size: " +MAX_REQUEST_SIZE );
+				
+				
+				//Change the annotation class so that it uses the values from the properties file /flex
+				final MultipartConfig classAnnotation = AmsterLogFileUploadServlet.class.getAnnotation(MultipartConfig.class);
+				changeAnnotationValue(classAnnotation, "maxFileSize", MAX_FILE_SIZE);
+				changeAnnotationValue(classAnnotation, "maxRequestSize", MAX_REQUEST_SIZE);
+			}
+			
+
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		
+	}
+	
+    @SuppressWarnings("unchecked")
+    private static Object changeAnnotationValue(Annotation annotation, String key, Object newValue){
+        Object handler = Proxy.getInvocationHandler(annotation);
+        Field f;
+        try {
+            f = handler.getClass().getDeclaredField("memberValues");
+        } catch (NoSuchFieldException | SecurityException e) {
+            throw new IllegalStateException(e);
+        }
+        f.setAccessible(true);
+        Map<String, Object> memberValues;
+        try {
+            memberValues = (Map<String, Object>) f.get(handler);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+        Object oldValue = memberValues.get(key);
+        if (oldValue == null || oldValue.getClass() != newValue.getClass()) {
+            throw new IllegalArgumentException();
+        }
+        memberValues.put(key,newValue);
+        return oldValue;
+    }
     
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
@@ -59,8 +136,6 @@ public class AmsterLogFileUploadServlet extends HttpServlet  {
 		HttpSession session = request.getSession(true);
 		if (session == null) {
 			out.print("{\"error\" : \"null sesh\"}");
-			//out//.println( "{ \"total_bytes\" : \"0\", \"bytes_uploaded\" : \"0\", \"bytes_parsed\" : \"0\", \"upload_percent\" : \"0\", \"parse_percent\" : \"0\", \"message\" : \"Not started\"}");
-			//out.println(uploadProgressListener.getJSON());
 			return;
 		}
 
@@ -115,17 +190,9 @@ public class AmsterLogFileUploadServlet extends HttpServlet  {
         // sets maximum size of request (include file + form data)
         upload.setSizeMax(MAX_REQUEST_SIZE);
  
-        // constructs the directory path to store upload file
-        // this path is relative to application's directory
-       // String uploadPath = getServletContext().getRealPath("")
-       //         + File.separator + UPLOAD_DIRECTORY;
-        
-     
-        String uploadPath = "C:\\Tomcat8\\webapps\\ROOT\\uploaded_logs\\";
-        
         
         // creates the directory if it does not exist
-        File uploadDir = new File(uploadPath);
+        File uploadDir = new File(UPLOAD_DIRECTORY);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
@@ -171,16 +238,15 @@ public class AmsterLogFileUploadServlet extends HttpServlet  {
                 		
                 		if(item.getFieldName().equals("ignorelist")){
                 			ignoreList=item.getString();
-                			System.out.println("igList "+ignoreList);
                 		}
                 	}
                 	
                     // processes only fields that are not form fields
                     if (!item.isFormField()) {
                         fileName = new File(item.getName()).getName();
-                        System.out.println("FILE NAME: "+fileName);
-                        String filePath = uploadPath + File.separator + fileName;
-                        System.out.println("FILE PATH :" +filePath);
+                        System.out.println("**AMSTER Uploading file: "+fileName);
+                        String filePath = UPLOAD_DIRECTORY + File.separator + fileName;
+
                         File storeFile = new File(filePath);
  
                         // saves the file on disk
@@ -195,7 +261,6 @@ public class AmsterLogFileUploadServlet extends HttpServlet  {
             hib_Session.beginTransaction();
             TableLogFile hib_LogFile = new TableLogFile();
 
-            //hib_LogFile.setOutputFileName("TEST");
             hib_LogFile.setRealFileName(fileName);
             hib_LogFile.setShortName(shortName);
             hib_LogFile.setDescription(description);
@@ -208,26 +273,20 @@ public class AmsterLogFileUploadServlet extends HttpServlet  {
             hib_Session.close();
             
             //Go parse the file
-            ClfyLogParser clp = new ClfyLogParser(hib_LogFile,uploadProgressListener,fileName,String.valueOf(hib_LogFile.getId()),uploadPath,stackB,ignoreList );
+            ClfyLogParser clp = new ClfyLogParser(hib_LogFile,uploadProgressListener,fileName,String.valueOf(hib_LogFile.getId()),UPLOAD_DIRECTORY,stackB,ignoreList );
             clp.processFile();
             
-    		//out.println("{\"message\" : \"success\" }");
-            System.out.println("Finished uploading");
+            System.out.println("**AMSTER Finished uploading a file");
             response.sendRedirect("uploaded.jsp");
             
         } catch (Exception ex) {
         	ex.printStackTrace();
         	String message = ex.toString();
         	response.sendRedirect("error.jsp?message="+URLEncoder.encode(message,"UTF-8"));
-        	//out.println("{\"error\" : \""+ex.toString()+"\" }");
 
         }
-        
-
-
-		
+        	
     }
 	
-
 	
 }

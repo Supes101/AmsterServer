@@ -19,22 +19,20 @@
   		<property name="hibernate.c3p0.max_statements">50</property>
   		<property name="hibernate.c3p0.idle_test_period">3000</property>
         
-        <mapping class="com.amster.db.hibernate.TableLogFile"></mapping>
-        <mapping class="com.amster.db.hibernate.TableDiag"></mapping>
-        <mapping class="com.amster.db.hibernate.TableDiagInfo"></mapping>
-        <mapping class="com.amster.db.hibernate.TableException"></mapping>
-        <mapping class="com.amster.db.hibernate.TableExceptionTimes"></mapping>
-        <mapping class="com.amster.db.hibernate.TableFileInfo"></mapping>
-        <mapping class="com.amster.db.hibernate.TableThreadFile"></mapping>
-        <mapping class="com.amster.db.hibernate.TableTimeLog"></mapping>
-        <mapping class="com.amster.db.hibernate.TableTopQueries"></mapping>
-        <mapping class="com.amster.db.hibernate.ViewLogFile"></mapping>
-        <mapping class="com.amster.db.hibernate.ViewTimeLog"></mapping>
-        <mapping class="com.amster.db.hibernate.ViewTopQueries"></mapping>
-        <mapping class="com.amster.db.hibernate.ViewThreadFile"></mapping>
-        <mapping class="com.amster.db.hibernate.ViewTopQueries"></mapping>
-        <mapping class="com.amster.db.hibernate.TableDiagnostic"></mapping>
-        <mapping class="com.amster.db.hibernate.TableExceptionDetail"></mapping>
-
+        <mapping resource="com/amster/db/hibernate/TableLogFile.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableDiag.hbm.xml"></mapping> 
+        <mapping resource="com/amster/db/hibernate/TableDiagInfo.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableException.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableExceptionTimes.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableFileInfo.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableThreadFile.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableTimeLog.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/TableTopQueries.hbm.xml"></mapping>
+        <mapping resource="com/amster/db/hibernate/ViewLogFile.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/ViewTimeLog.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/ViewTopQueries.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/ViewThreadFile.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/TableDiagnostic.hbm.xml"></mapping>
+		<mapping resource="com/amster/db/hibernate/TableExceptionDetail.hbm.xml"></mapping>	
 	</session-factory>
 </hibernate-configuration>

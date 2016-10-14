@@ -2,18 +2,68 @@ package com.amster.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.amster.poc.TestProperties;
 
 public class AmsterUtils {
 	
 	private static final Pattern PATTERN = Pattern.compile("[^A-Za-z0-9_\\-]");
-
 	private static final int MAX_LENGTH = 127;
+	private static final String AMSTER_PROPS = "amster.properties";
+	
+	  private void getProperty(String propname, String holder){
+	    	
+	    	Properties prop = new Properties();
+			InputStream input = null;
+
+			try{
+				input = TestProperties.class.getClassLoader().getResourceAsStream(AMSTER_PROPS);
+		
+				if(input!=null){
+					// load a properties file
+					prop.load(input);
+					
+					String propS =  prop.getProperty(propname);
+					if(propS!=null){
+						holder = propS;
+					}
+				}
+			
+			} catch (Exception e) {
+				System.out.println("There was a problem reading "+propname+" from the amster.properties file - using defaults");
+			}
+	    	
+	    }
+	    
+	    private void getProperty(String propname, int holder){
+	    	Properties prop = new Properties();
+			InputStream input = null;
+
+			try{
+				input = TestProperties.class.getClassLoader().getResourceAsStream("AMSTER_PROPS");
+		
+				if(input!=null){
+					// load a properties file
+					prop.load(input);
+					
+					String propS =  prop.getProperty(propname);
+					if(propS!=null){
+						holder = Integer.valueOf(propS);
+					}
+				}
+			
+			} catch (Exception e) {
+				System.out.println("There was a problem reading "+propname+" from the amster.properties file - using defaults");
+			}
+	    }
 
 	public static String escapeStringAsFilename(String in){
 

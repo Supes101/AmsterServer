@@ -1,5 +1,6 @@
 use amster;
 
+SET foreign_key_checks = 0;
 
 drop table table_log_file;
 create table table_log_file(
@@ -10,7 +11,7 @@ create table table_log_file(
 	description text,
 	create_date date,
 	PRIMARY KEY (_id)
-);
+)engine=innodb;
 
 drop table table_file_info;
 create table table_file_info(
@@ -18,18 +19,19 @@ create table table_file_info(
 	remove_all_stacks boolean,
 	exception_ignore_list varchar(5000),
 	file_info2log_file int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( file_info2log_file) REFERENCES table_log_file(_id) ON DELETE CASCADE
+)engine=innodb;
 
 drop table table_thread_file;
 create table table_thread_file(
 	_id int NOT NULL AUTO_INCREMENT,
 	thread_id varchar(500),
 	thread_file varchar(1000),
-	thread_info2log_file int,
+	thread_info2log_file int NOT NULL,
 	PRIMARY KEY (_id),
-	FOREIGN KEY( thread_info2log_file) REFERENCES table_log_file(_id)
-);
+	FOREIGN KEY( thread_info2log_file) REFERENCES table_log_file(_id) ON DELETE CASCADE
+)engine=innodb;
 
 
 drop table table_time_log;
@@ -42,8 +44,9 @@ create table table_time_log(
     heading_colour varchar(100),
     icon_colour varchar(100),
 	time_log2log_file int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( time_log2log_file) REFERENCES table_log_file(_id) ON DELETE CASCADE
+)engine=innodb;
 
 drop table table_top_queries;
 create table table_top_queries(
@@ -53,8 +56,9 @@ create table table_top_queries(
 	query_time varchar(100),
     query_order int,
 	query2log_file int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( query2log_file) REFERENCES table_log_file(_id) ON DELETE CASCADE
+)engine=innodb;
 
 drop table table_exception;
 create table table_exception(
@@ -63,16 +67,18 @@ create table table_exception(
     stack_trace text,
     exception_count int,
 	exception2log_file int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( exception2log_file) REFERENCES table_log_file(_id) ON DELETE CASCADE
+)engine=innodb;
 
 drop table table_exception_times;
 create table table_exception_times(
 	_id int NOT NULL AUTO_INCREMENT,
 	exception_time varchar(100),
 	exception_time2exception int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( exception_time2exception) REFERENCES table_exception(_id) ON DELETE CASCADE
+)engine=innodb;
 
 drop table table_diag_info;
 create table table_diag_info(
@@ -81,8 +87,9 @@ create table table_diag_info(
     high_water_mark int,
     high_water_time varchar(100),
 	diag2log_file int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( diag2log_file) REFERENCES table_log_file(_id) ON DELETE CASCADE
+)engine=innodb;
 
 drop table table_diag;
 create table table_diag(
@@ -90,8 +97,9 @@ create table table_diag(
     diag_value int,
     diag_time varchar(100),
 	diag2diag_info int,
-	PRIMARY KEY (_id)
-);
+	PRIMARY KEY (_id),
+	FOREIGN KEY( diag2diag_info) REFERENCES table_diag_info(_id) ON DELETE CASCADE
+)engine=innodb;
 
 
 create or replace view view_log_file as 
@@ -109,4 +117,4 @@ create or replace view view_top_queries as
 select * from table_top_queries
 order by query_order;
 
-
+SET foreign_key_checks = 1;

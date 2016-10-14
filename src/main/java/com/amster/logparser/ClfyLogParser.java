@@ -35,7 +35,7 @@ import com.amster.utils.AmsterUtils;
 
 public class ClfyLogParser {
 	
-	public static final String LOG_FILE_STARTED = "Log file started at";
+	public static final String LOG_FILE_STARTED = "**AMSTER Log file parse started at";
 	public static final String START_TIME_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
 	public static final String LOG_TIME_PATTERN =  "[0-9]{4}\\:[0-9]{2}\\:[0-9]{2}\\.[0-9]{3}\\ [0-9]{1,9}|[0-9]{4}\\:[0-9]{2}\\:[0-9]{2}\\.[0-9]{3}\\ -[0-9]{1,9}";
 	public static final String EXCEPTION_PATTERN="\\(.+\\.java\\:\\d+\\)|\\(Unknown Source\\)|\\(Native Method\\)";
@@ -348,7 +348,6 @@ public class ClfyLogParser {
 			String previousLine="";
 			Long cnt = 0l;
 	
-	        System.out.println("Started");
 	        while ( (line = reader.readLine()) != null ){
 	        	cnt++;
 	        	//System.out.println(cnt);

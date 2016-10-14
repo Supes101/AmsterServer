@@ -43,16 +43,15 @@
  			<artifactId>c3p0</artifactId>
  			<version>0.9.1.2</version> 
 		</dependency> 
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate</artifactId>
+    <version>3.2.6.ga</version>
+</dependency>
 		<dependency>
-			<groupId>hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-			<version>3.1rc2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>asm</artifactId>
-					<groupId>asm</groupId>
-				</exclusion>
-			</exclusions>
+    		<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-annotations</artifactId>
+    		<version>3.2.0.ga</version>
 		</dependency>
 		<dependency>
 			<groupId>dom4j</groupId>
