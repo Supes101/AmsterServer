@@ -40,6 +40,7 @@ public class ViewLogFile implements java.io.Serializable {
 	@Column(name = "create_date")
 	@Type(type="date")
 	private Date createDate;
+
 	
 
 	public ViewLogFile() {
